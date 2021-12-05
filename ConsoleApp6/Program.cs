@@ -8,7 +8,7 @@ namespace ConsoleApp6
 {
     internal class Program
     {
-        private static readonly string token = "Your token";
+        private static readonly string token = "2022806897:AAFAZI17CLSN7SIUfMjNZD2cOgBKZ1TEOMg";
         private static TelegramBotClient _telegramBotClient;
         private SqlCommands _commands;
         private static string _lastcommand = string.Empty;
@@ -22,7 +22,7 @@ namespace ConsoleApp6
                 {"/start", new Item(){description = "Напишите что нибудь чтобы начать",function = ShowMainButtons()} },
                 {"Добавить шмотки",new Item(){description = "Выберите тип добавляемой одежды",function = ShowСlothes()}},
                 {"Место проживания",new Item(){description = "Введите название населённого пункта в котором вы проживаете"}},
-                {"Удалить вещь",new Item(){description ="Напишите название вещи" }},
+                {"Удалить вещь",new Item(){description ="Напишите название вещи",function=new ReplyKeyboardRemove() }},
                 {"Доп.параметры вещей",new Item(){description ="Введите название вещи которой нужно изменить характеристику \n"+_commands.ShowItems(), function = new ReplyKeyboardRemove()} },
                 {"Штаны,Шорты,Юбки",new Item(){description = "Введите название одежды",function =new ReplyKeyboardRemove() }},
                 {"Подштанники,понталоны",new Item(){description = "Введите название одежды",function =new ReplyKeyboardRemove() }},
@@ -35,18 +35,24 @@ namespace ConsoleApp6
                 {"Платье и костюмы",new Item(){description = "Введите название одежды",function =new ReplyKeyboardRemove() }},
                 {"Назад",new Item(){description = "Выберите необходимую функцию",function=ShowMainButtons()}},
                 {"Посмотреть список вещей",new Item(){description =_commands.ShowItems() }},
-                {"Период ношения вещи",new Item(){description = "введите количество дней которое планируете носить вещь"}},
+                {"Период ношения вещи",new Item(){description = "введите количество дней ккоторое планируете носить вещь"}},
                 {"Место ношения",new Item(){description = "укажите местро в котором вы хотели бы носить данную вещь"}},
                 {"Температурные параметры вещи",new Item(){description = "Укажите при каких температурах должна носиться вещь в формате min-max"}},
                 {"Условия ношения",new Item(){description="При каких погодных условиях стоит носить данную вещь"}},
-                {_commands.CheckItem(text),new Item(){description = "Выбирите необходимую функцию для изменения",function = ShowExtraFutures()}}
+                {"Подбери мне одежду",new Item(){description = "выбирите место куда желаете пойти",function = ShowPlaces()}},
+                {_commands.GetDB(text),new Item(){description = "Выбирите необходимую функцию для изменения",function = ShowExtraFutures()}},
+                {"Работа",new Item()},
+                {"Свидание",new Item()},
+                {"Встреча с друзьями",new Item()},
+                {"Светский вечер",new Item()}
+
             };
          
         }
         [Obsolete]
         private static void Main()
         {
-         
+          
             _telegramBotClient = new TelegramBotClient(token);
             _telegramBotClient.StartReceiving();
             _telegramBotClient.OnMessage += TelegramBotClient_OnMessage;
@@ -169,6 +175,26 @@ namespace ConsoleApp6
                     },
                     new() 
                         {new() {Text = "Верхняя одежда"}, new() {Text = "Платье и костюмы"}}
+                }
+            };
+        }
+
+        private IReplyMarkup ShowPlaces()
+        {
+            return new ReplyKeyboardMarkup
+            {
+                Keyboard = new List<List<KeyboardButton>>
+                {
+                    new()
+                    {
+                        new KeyboardButton() {Text ="Работа"}, new KeyboardButton() {Text = "Свидание"}
+                    },
+                    new()
+                    {
+                        new KeyboardButton() {Text = "Встреча с друзьями"}, new KeyboardButton() {Text = "Светский вечер"}
+                    },
+                  
+
                 }
             };
         }

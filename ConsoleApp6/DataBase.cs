@@ -2,22 +2,19 @@
 using System.Data;
 using System.Data.SQLite;
 
-
 namespace ConsoleApp6
 {
-    class DataBase
+    internal class DataBase
     {
-        SQLiteConnection connection;
-        string sourse = @"ForTelegramBot.db";
+        private SQLiteConnection connection;
+        private readonly string sourse = @"ForTelegramBot.db";
 
         public DataTable Open(string quary)
         {
-            if (Connect(sourse))
-            {
-                return FillData(quary);
-            }
+            if (Connect(sourse)) return FillData(quary);
             return null;
         }
+
         private bool Connect(string fileName)
         {
             try
@@ -32,14 +29,13 @@ namespace ConsoleApp6
                 return false;
             }
         }
+
         private DataTable FillData(string query)
         {
-
-            SQLiteDataAdapter adapter = new SQLiteDataAdapter(query, connection);
+            var adapter = new SQLiteDataAdapter(query, connection);
             var table = new DataTable();
             adapter.Fill(table);
             return table;
-
         }
     }
 }
